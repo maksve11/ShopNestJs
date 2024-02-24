@@ -7,23 +7,23 @@ import { User } from './interfaces/user.interface';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-    constructor(
-        private authService: AuthService,
-        private userService: UserService,
-    ) {
-        super();
-    }
+  constructor(
+    private authService: AuthService,
+    private userService: UserService,
+  ) {
+    super();
+  }
 
-    async validate(username: string, password: string): Promise<User> {
-        const user = await this.authService.validateUser(username, password);
-        if (!user) {
-            throw new UnauthorizedException();
-        }
-        const { id } = user;
-        const foundUser = await this.userService.findById(id);
-        if (!foundUser) {
-            throw new UnauthorizedException();
-        }
-        return foundUser;
+  async validate(username: string, password: string): Promise<User> {
+    const user = await this.authService.validateUser(username, password);
+    if (!user) {
+      throw new UnauthorizedException();
     }
+    const { id } = user;
+    const foundUser = await this.userService.findById(id);
+    if (!foundUser) {
+      throw new UnauthorizedException();
+    }
+    return foundUser;
+  }
 }
